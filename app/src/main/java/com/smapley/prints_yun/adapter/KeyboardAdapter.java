@@ -14,6 +14,7 @@ import com.smapley.prints_yun.mode.BaseMode;
 import com.smapley.prints_yun.mode.KeyboardItemMode;
 import com.smapley.prints_yun.util.KeyboardUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,19 +29,30 @@ public class KeyboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private KeyboardUtil keyboardUtil;
 
     private MyItemClickListener myItemClickListener;
+    private KeyboardAdapter.MyLimitListener myLimitListener = new KeyboardAdapter.MyLimitListener() {
+        @Override
+        public void ToNextInput(View view, Integer position) {
+            if(position+1<holderList.size()) {
+                ((KerboardEdiTextHolder) holderList.get(position + 1)).keyboard_ediText.requestFocus();
+                keyboardUtil.setEditext(((KerboardEdiTextHolder) holderList.get(position + 1)).keyboard_ediText, myLimitListener, ((KeyboardItemMode) modeList.get(position + 1)).getEdit(), position + 1);
+            }
+        }
+    };
+
+    private List<RecyclerView.ViewHolder> holderList;
 
     public KeyboardAdapter(Activity activity, Context context, List<BaseMode> modeList, KeyboardUtil keyboardUtil) {
         this.modeList = modeList;
         this.activity = activity;
         this.context = context;
-        this.keyboardUtil=keyboardUtil;
+        this.keyboardUtil = keyboardUtil;
+        holderList = new ArrayList<>();
         inflater = LayoutInflater.from(context);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
-
         switch (viewType) {
             case 1:
                 view = inflater.inflate(R.layout.layout_keyboard_textitem, parent, false);
@@ -55,14 +67,16 @@ public class KeyboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        holderList.add(position, holder);
         switch (getItemViewType(position)) {
             case 1:
                 ((KerboardTextItemHolder) holder).setData((KeyboardItemMode) modeList.get(position), myItemClickListener);
                 break;
             case 2:
-                ((KerboardEdiTextHolder) holder).setData( (KeyboardItemMode) modeList.get(position),position,keyboardUtil);
+                ((KerboardEdiTextHolder) holder).setData((KeyboardItemMode) modeList.get(position), position, keyboardUtil,myLimitListener);
         }
     }
+
 
     @Override
     public int getItemViewType(int position) {

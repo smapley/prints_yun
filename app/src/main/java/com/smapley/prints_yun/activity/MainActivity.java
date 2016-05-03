@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.smapley.prints_yun.R;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     @ViewInject(R.id.bottom_item4)
     private TextView bottom_item4;
 
+    @ViewInject(R.id.bottom_layout)
+    private LinearLayout bottom_layout;
 
     @ViewInject(R.id.fragment)
     private CustomViewPager viewPager;
@@ -108,5 +111,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         viewPager.setCurrentItem(num);
+    }
+
+    public void showBottom() {
+        int visibility = bottom_layout.getVisibility();
+        if (visibility == View.GONE || visibility == View.INVISIBLE) {
+            bottom_layout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideBottom() {
+        int visibility = bottom_layout.getVisibility();
+        if (visibility == View.VISIBLE) {
+            bottom_layout.setVisibility(View.GONE);
+        }
     }
 }

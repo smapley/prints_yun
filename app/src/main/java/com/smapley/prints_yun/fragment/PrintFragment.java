@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.smapley.prints_yun.R;
 import com.smapley.prints_yun.adapter.KeyboardAdapter;
@@ -27,6 +28,7 @@ import com.smapley.prints_yun.view.listview.SwipeMenuItem;
 import com.smapley.prints_yun.view.listview.SwipeMenuListView;
 
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
@@ -51,6 +53,9 @@ public class PrintFragment extends Fragment {
 
     @ViewInject(R.id.keyboardItem)
     private RecyclerView keyboardItem;
+
+    @ViewInject(R.id.keyboard_hide)
+    private TextView keyboard_hide;
 
     private KeyboardUtil keyboardUtil;
 
@@ -143,6 +148,16 @@ public class PrintFragment extends Fragment {
 
 
     }
+
+    @Event({R.id.keyboard_hide})
+    private void onClick(View view){
+        switch (view.getId()){
+            case R.id.keyboard_hide:
+                keyboardUtil.hideKeyboard();
+                break;
+        }
+    }
+
 
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,

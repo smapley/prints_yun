@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 
+import com.smapley.prints_yun.activity.MainActivity;
 import com.smapley.prints_yun.adapter.KeyboardAdapter;
 import com.smapley.prints_yun.http.result.IndexResult;
 import com.smapley.prints_yun.mode.BaseMode;
@@ -27,6 +28,7 @@ public class KeyboardUtil {
     private List<BaseMode> keyboardList;
 
     private EditText ed;
+    private int mPosition;
 
     public KeyboardUtil(Activity act, Context ctx,RecyclerView keyboardItem){
         this.act = act;
@@ -51,8 +53,10 @@ public class KeyboardUtil {
         keyboardItem.setLayoutManager(layoutManager);
     }
 
-    public void setEditext(EditText editext, final KeyboardAdapter.MyLimitListener myLimitListener, final IndexResult.Edit edit,final int position){
+    public void setEditext(EditText editext, final KeyboardAdapter.MyLimitListener myLimitListener, final IndexResult.Edit edit,int position){
         this.ed=editext;
+        this.mPosition=position;
+        ed.setText("");
         keyboardAdapter.setOnItemClickListener(new KeyboardAdapter.MyItemClickListener() {
             @Override
             public void onItemClick(View view, String text) {
@@ -60,8 +64,11 @@ public class KeyboardUtil {
                 if(editable.length()<edit.getLimit()) {
                     int start = ed.getSelectionStart();
                     editable.insert(start, text);
-                }else{
-                    myLimitListener.ToNextInput(ed,position);
+                }
+
+
+                if(editable.length()>=edit.getLimit()) {
+                    myLimitListener.ToNextInput(ed,mPosition);
                 }
             }
         });
@@ -73,6 +80,7 @@ public class KeyboardUtil {
         int visibility = keyboardItem.getVisibility();
         if (visibility == View.GONE || visibility == View.INVISIBLE) {
             keyboardItem.setVisibility(View.VISIBLE);
+            ((MainActivity)act).hideBottom();
         }
     }
 
@@ -80,6 +88,7 @@ public class KeyboardUtil {
         int visibility = keyboardItem.getVisibility();
         if (visibility == View.VISIBLE) {
             keyboardItem.setVisibility(View.GONE);
+            ((MainActivity)act).showBottom();
         }
     }
 

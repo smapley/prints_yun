@@ -15,27 +15,16 @@ import com.smapley.prints_yun.util.KeyboardUtil;
  */
 public class KerboardEdiTextHolder extends BaseHolder {
 
-    private EditText keyboard_ediText;
+    public  EditText keyboard_ediText;
     private KeyboardUtil keyboardUtil;
-    private KeyboardAdapter.MyLimitListener myLimitListener=new KeyboardAdapter.MyLimitListener() {
-        @Override
-        public void ToNextInput(View view, Integer position) {
-            if(getPosition()==position+1){
-                view.clearFocus();
-                keyboard_ediText.requestFocus();
-                keyboardUtil.showKeyboard();
-            }else{
-                keyboardUtil.hideKeyboard();
-            }
-        }
-    };
+
 
     public KerboardEdiTextHolder(View view) {
         super(view);
         keyboard_ediText=(EditText)view.findViewById(R.id.keyboard_ediText);
     }
 
-    public void setData(final KeyboardItemMode mode,final int position,final KeyboardUtil keyboardUtil){
+    public void setData(final KeyboardItemMode mode,final int position,final KeyboardUtil keyboardUtil,final KeyboardAdapter.MyLimitListener myLimitListener){
         if(mode.getEdit().getRoot()==1) {
             this.keyboardUtil=keyboardUtil;
             keyboard_ediText.setInputType(InputType.TYPE_NULL);
